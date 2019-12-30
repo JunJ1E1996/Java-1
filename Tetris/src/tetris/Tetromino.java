@@ -5,9 +5,9 @@ package tetris;
  * @author Leslie Leung
  */
 public class Tetromino {
-	protected Cell[] cells;		//用对象数组cells存储四格方块
-	protected Cell axis;	//旋转轴
-	protected Cell[] rotateCells;	//需要旋转的格子集合
+	protected Cell[] cells;		 
+	protected Cell axis;	// 臂锣禸
+	protected Cell[] rotateCells;	
 	
 	/**
 	 * 实现四格方块逆时针转的算法
@@ -15,10 +15,10 @@ public class Tetromino {
 	 * @param rotateCells 要旋转的格子的集合
 	 */
 	protected void anticlockwiseRotate(Cell axis, Cell[] rotateCells) {
-		int oldX;	//用以表示传进来的rotateCell的横坐标
-		int oldY;	//用以表示传进来的rotateCell的纵坐标
-		int newX;	//用以表示传进来的rotateCell旋转后的横坐标
-		int newY;	//用以表示传进来的rotateCell旋转后的纵坐标
+		int oldX;	//rotateCell oldx
+		int oldY;	//rotateCell oldy
+		int newX;	
+		int newY;	
 		
 		for(int i = 0; i < 3; i ++) {
 			oldX = rotateCells[i].getX();
@@ -58,11 +58,11 @@ public class Tetromino {
 	/**
 	 * 实现四格方块的自动下落
 	 */
-	protected void softDrop() {
-		int oldY;	//某个格子下落前的纵坐标
-		int newY;	//某个格子下落后的纵坐标
+	protected void softDrop() { // 奔辅
+		int oldY;
+		int newY;	
 		
-		/* 所有格子下移 */
+		
 		for(int i = 0; i < cells.length; i ++) {
 			oldY = cells[i].getY();
 			newY = oldY + 1;
@@ -75,8 +75,8 @@ public class Tetromino {
 	 * 实现四格方块左移的算法
 	 */
 	protected void moveLeft() {
-		int oldX;	//某个格子左移前的横坐标
-		int newX;	//某个格子左移后的横坐标
+		int oldX;	
+		int newX;	
 		
 		/* 所有格子左移 */
 		for(int i = 0; i < cells.length; i ++) {

@@ -4,32 +4,32 @@ import java.awt.*;
 import java.util.Arrays;
 
 /**
- * Ì°³ÔÉßÀà
+ * æ€œå‹›å½´æ¿¬
  * @author Leslie Leung
  * @see Cell
  */
 public class Worm {
 	
-	public static final int UP = 1;	//·½Ïò£ºÉÏ
-	public static final int DOWN = -1;		//·½Ïò£ºÏÂ
-	public static final int LEFT = 2;	//·½Ïò£º×ó
-	public static final int RIGHT = -2;	//·½Ïò£ºÓÒ
-	public static final int DEFAULT_LENGTH = 6;	//ÉèÖÃÌ°³ÔÉßµÄÄ¬ÈÏ³¤¶ÈÎª6
-	public static final int DEFAULT_DIRECTION = RIGHT;	//Ä¬ÈÏÔËĞĞ·½Ïò
-	public static final int INIT_SPEED = 100;	//Ì°³ÔÉß³õÊ¼ËÙ¶È
+	public static final int UP = 1;		//æ–¹å‘ï¼šä¸Š
+	public static final int DOWN = -1;		//æ–¹å‘ï¼šä¸‹
+	public static final int LEFT = 2;	//æ–¹å‘ï¼šå·¦
+	public static final int RIGHT = -2;	//æ–¹å‘ï¼šå³
+	public static final int DEFAULT_LENGTH = 6;	//è®¾ç½®è´ªåƒè›‡çš„é»˜è®¤é•¿åº¦ä¸º6
+	public static final int DEFAULT_DIRECTION = RIGHT;	//é»˜è®¤è¿è¡Œæ–¹å‘
+	public static final int INIT_SPEED = 100;	//è´ªåƒè›‡åˆå§‹é€Ÿåº¦
 	
-	private int currentLength;		//Ì°³ÔÉßµ±Ç°³¤¶È
-	private int currentDirection;	//Ì°³ÔÉßµ±Ç°·½Ïò
-	private boolean eat;	//ÅĞ¶ÏÌ°³ÔÉßÊÇ·ñ³Ôµ½Ê³Îï
+	private int currentLength;		//è´ªåƒè›‡å½“å‰é•¿åº¦
+	private int currentDirection;	//è´ªåƒè›‡å½“å‰æ–¹å‘
+	private boolean eat;	//åˆ¤æ–­è´ªåƒè›‡æ˜¯å¦åƒåˆ°é£Ÿç‰©
 	private Cell[] cells;
 	
 	/**
-	 * ¹¹Ôì·½·¨£¬³õÊ¼»¯Ì°³ÔÉß
+	 * æ„é€ æ–¹æ³•ï¼Œåˆå§‹åŒ–è´ªåƒè›‡
 	 */
 	public Worm() {
 		cells = new Cell[DEFAULT_LENGTH];
-		currentDirection = DEFAULT_DIRECTION;	//ÉèÖÃÓÎÏ·Ò»¿ªÊ¼Ê±µÄÄ¬ÈÏ·½ÏòÎªDOWN
-		currentLength = DEFAULT_LENGTH;		//³õÊ¼»¯µ±Ç°Ì°³ÔÉß³¤¶ÈÎªÄ¬ÈÏ³¤¶È
+		currentDirection = DEFAULT_DIRECTION;	//è®¾ç½®æ¸¸æˆä¸€å¼€å§‹æ—¶çš„é»˜è®¤æ–¹å‘ä¸ºDOWN
+		currentLength = DEFAULT_LENGTH;		//åˆå§‹åŒ–å½“å‰è´ªåƒè›‡é•¿åº¦ä¸ºé»˜è®¤é•¿åº¦
 		
 		for(int i = 0;i < DEFAULT_LENGTH; i ++) {
 			cells[i] = new Cell(DEFAULT_LENGTH - i - 1, 0);
@@ -38,26 +38,26 @@ public class Worm {
 	}
 	
 	/**
-	 * »ñÈ¡Ì°³ÔÉßµ±Ç°³¤¶È
-	 * @return Ì°³ÔÉßµÄµ±Ç°³¤¶È
+	 * é³³ïŸ«æ€œå‹›å½´çµïé…—åƒ…
+	 * @return æ€œå‹›å½´è…”çµïé…—åƒ…
 	 */
 	public int getCurrentLength() {
 		return currentLength;
 	}
 	
 	/**
-	 * »ñÈ¡Ì°³ÔÉßµÄµ±Ç°·½Ïò
-	 * @return Ì°³ÔÉßµÄµ±Ç°·½Ïò
+	 * é³³ïŸ«æ€œå‹›å½´è…”çµïæºç ƒ
+	 * @return æ€œå‹›å½´è…”çµïæºç ƒ
 	 */
 	public int getCurrentDirection() {
 		return currentDirection;
 	}
 	
 	/**
-	 * ¼ì²éÌ°³ÔÉßÊı×éÊÇ·ñÓëÒ»¸ö½áµãµÄÎ»ÖÃÖØµş
-	 * @param x ´«ÈëµÄ½áµãµÄºá×ø±ê
-	 * @param y ´«ÈëµÄ½áµãµÄ×İ×ø±ê
-	 * @return ÖØµş£¬true£»²»ÖØµş£¬false
+	 * æ½°è„¤æ€œå‹›å½´æ…éƒªå²†ç˜è¿µç¨è·ºè³¦è¸è…”å¼‡ç¦»ç¬­è©
+	 * @param x æ›ï µè…”è³¦è¸è…”ç­µé‡´æ¢“
+	 * @param y æ›ï µè…”è³¦è¸è…”è»é‡´æ¢“
+	 * @return ç¬­è©ã„›trueË™ç¥¥ç¬­è©ã„›false
 	 */
 	public boolean contains(int x, int y) {
 		
@@ -71,11 +71,11 @@ public class Worm {
 	}
 	
 	/**
-	 * ¸Ä±ä·½Ïò
-	 * @param Ì°³ÔÉßĞÂµÄÅÀĞĞ·½Ïò
+	 * èœŠæ›¹æºç ƒ
+	 * @param æ€œå‹›å½´é™”è…”é°¾ä¿´æºç ƒ
 	 */
 	public void changeDirection(int direction) {
-		/* Èç¹û´«ÈëµÄĞÂ·½ÏòÓëµ±Ç°Ì°³ÔÉßÔËĞĞ·½ÏòÏàÍ¬»òÏà·´£¬·µ»Ø£¬²»²ÉÈ¡ÈÎºÎ²Ù×÷   */
+		/* ï ±å½†æ›ï µè…”é™”æºç ƒè¿µçµïæ€œå‹›å½´å ä¿´æºç ƒçœˆè‚®éº¼çœˆæ¯€ã„›æ®¿éš™ã„›ç¥¥ç²’ïŸ«ï ˜ç¡ç´±é‡¬   */
 		if(currentDirection == direction || currentDirection + direction == 0) {
 			return;
 		}
@@ -84,20 +84,20 @@ public class Worm {
 	}
 	
 	/**
-	 * ÅÀĞĞËã·¨£ºÒÆ³ıÄ©Î²½áµã£¬ÆäÓàËùÓĞ½áµãÍùºóÒÆ£¬ÔÙ°ÑÄ©Î²½áµãÌí¼Óµ½Í·½áµãµÄÎ»ÖÃÖĞ
-	 * @param direction ÅÀĞĞ·½Ïò
-	 * @return Ì°³ÔÉßÊÇ·ñ³Ôµ½Ê³Îï£¬true±íÊ¾³Ôµ½£¬false±íÊ¾³Ô²»µ½
+	 * é°¾ä¿´å‘¾æ¥Šã„©ç—„å£ºè—ºå¸£è³¦è¸ã„›ï›´è±»å€è¡„è³¦è¸å˜ç¶´ç—„ã„›å©¬åƒè—ºå¸£è³¦è¸æ°æ¨“å–„èŠ›è³¦è¸è…”å¼‡ç¦»ç¬¢
+	 * @param direction é°¾ä¿´æºç ƒ
+	 * @return æ€œå‹›å½´å²†ç˜å‹›å–„å¦˜æ˜œã„›trueæ¡¶å°¨å‹›å–„ã„›falseæ¡¶å°¨å‹›ç¥¥å–„
 	 */
 	public boolean creep(int direction, Cell food) {
 		eat = false;
-		currentDirection = direction;	//½«ÅÀĞĞ·½ÏòÉèÖÃÎªÊäÈëµÄ·½Ïò
-		Cell head = newHead(currentDirection);	//ÖØÉèÍ·½áµã
+		currentDirection = direction;	//è”šé°¾ä¿´æºç ƒæ‰¢ç¦»å³ˆæ€€ï µè…”æºç ƒ
+		Cell head = newHead(currentDirection);	//ç¬­æ‰¢èŠ›è³¦è¸
 		
-		/* Èç¹ûÌ°³ÔÉßÅÀĞĞµÄÏÂÒ»Î»ÖÃÉÏ´æÔÚÊ³Îï£¬½øĞĞÊı×éÀ©Èİ£¬Éú³ÉĞÂÌ°³ÔÉß£¬²¢ÖØĞÂÉú³ÉÊ³Îï */
+		/* ï ±å½†æ€œå‹›å½´é°¾ä¿´è…”ç‹Ÿç¨å¼‡ç¦»å¥»æ¹”å©“å¦˜æ˜œã„›è¼›ä¿´æ…éƒªå­ºï §ã„›æ±œå‚–é™”æ€œå‹›å½´ã„›ç”œç¬­é™”æ±œå‚–å¦˜æ˜œ */
 		if( head.getX() == food.getX() && head.getY() == food.getY() ) {
 			cells = Arrays.copyOf(cells, cells.length + 1);
 			eat = true;
-			currentLength ++;	//³Ôµ½Ê³Îï£¬³¤¶È×ÔÔö
+			currentLength ++;	//å‹›å–„å¦˜æ˜œã„›é…—åƒ…èµ»å´
 		}
 		
 		for(int i = cells.length - 1; i > 0; i --) {
@@ -110,9 +110,9 @@ public class Worm {
 	}
 	
 	/**
-	 * ÖØĞÂÉú³ÉÍ·½áµãËã·¨£º¸ù¾İÅÀĞĞ·½ÏòÖØĞÂÉú³ÉÍ·½áµã
-	 * @param currentDirection µ±Ç°ÅÀĞĞ·½Ïò
-	 * @return ĞÂ½¨µÄÍ·½áµã
+	 * ç¬­é™”æ±œå‚–èŠ›è³¦è¸å‘¾æ¥Šã„©è·¦æ“‚é°¾ä¿´æºç ƒç¬­é™”æ±œå‚–èŠ›è³¦è¸
+	 * @param currentDirection çµïé°¾ä¿´æºç ƒ
+	 * @return é™”è†˜è…”èŠ›è³¦è¸
 	 */
 	public Cell newHead(int currentDirection) {
 		Cell newHead = null;
@@ -136,19 +136,19 @@ public class Worm {
 	}
 	
 	/**
-	 * ¼ì²éÌ°³ÔÉßÊÇ·ñ×²»÷Ëã·¨
-	 * @param direction µ±Ç°ÔË¶¯·½Ïò
-	 * @return ÊÇ·ñ²úÉú×²»÷
+	 * æ½°è„¤æ€œå‹›å½´å²†ç˜è¢‰åƒ»å‘¾æ¥Š
+	 * @param direction çµïå é›„æºç ƒ
+	 * @return å²†ç˜è‰æ±œè¢‰åƒ»
 	 */
 	public boolean hit(int direction) {
 		Cell nextHead = newHead(direction);
 		
-		/* ¼ì²éÊÇ·ñÅö×²µ½×ÔÉí */
+		/* æ½°è„¤å²†ç˜ç™²è¢‰å–„èµ»æ—¯ */
 		if( this.contains(nextHead.getX(), nextHead.getY()) ) {
 			return true;
 		}
 		
-		/* ¼ì²éÌ°³ÔÉßÊÇ·ñÅö±Ú */
+		/* æ½°è„¤æ€œå‹›å½´å²†ç˜ç™²æ— */
 		if(nextHead.getX() < 0 || nextHead.getX() >= WormStage.COLUMNS
 				||nextHead.getY() < 0 || nextHead.getY() >= WormStage.ROWS) {
 			return true;
@@ -157,7 +157,7 @@ public class Worm {
 		return false;
 	}
 	
-	/* »æÖÆÌ°³ÔÉß */
+	/* é¤…ç§¶æ€œå‹›å½´ */
 	public void paint(Graphics g) {
 		for(int i = 0; i < cells.length; i ++) {
 			cells[i].paintCell(g);

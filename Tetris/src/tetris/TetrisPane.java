@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  */
 public class TetrisPane extends JPanel {
 	public static final int ROWS = 20;	//整个场景的行数
-	public static final int COLUMNS = 16;	//整个场景的列数
+	public static final int COLUMNS = 10;	//整个场景的列数
 	
 	/* 表示7种不同的四格方块 */
 	public static final int I_SHAPED = 0;
