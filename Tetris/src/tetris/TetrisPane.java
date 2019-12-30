@@ -17,10 +17,10 @@ import javax.swing.JPanel;
  * @author Leslie Leung
  */
 public class TetrisPane extends JPanel {
-	public static final int ROWS = 20;	//整个场景的行数
-	public static final int COLUMNS = 10;	//整个场景的列数
+	public static final int ROWS = 20;	// tetris row
+	public static final int COLUMNS = 10;	// tetris columns
 	
-	/* 表示7种不同的四格方块 */
+	/* Difference kinds of shape*/
 	public static final int I_SHAPED = 0;
 	public static final int S_SHAPED = 1;
 	public static final int T_SHAPED = 2;
@@ -29,19 +29,19 @@ public class TetrisPane extends JPanel {
 	public static final int O_SHAPED = 5;
 	public static final int J_SHAPED = 6;
 	
-	public static final int KIND = 7;	//表示四格方块有7个种类
-	public static final int INIT_SPEED = 1000;	//表示下落的初始速度
+	public static final int KIND = 7;	
+	public static final int INIT_SPEED = 1000;	// initial speed of dropping
 	
-	private static int randomNum = 0;	//表示已生成的俄罗斯方块的数目
+	private static int randomNum = 0;	// number of excisted block
 	
 	private Random random;
-	private Tetromino currentTetromino;	//表示当前的四格方块
-	private Cell[][] wall;		//表示墙，null表示方块内没对象
-	private Timer autoDrop;		//实现自动下落的计时器
-	private KeyControl keyListener;	//表示键盘事件监控变量
+	private Tetromino currentTetromino;	// current four block 
+	private Cell[][] wall;		// when value is null , there is no item in block
+	private Timer autoDrop;		//timer of autodrop
+	private KeyControl keyListener;	
 	
 	/**
-	 * 构造方法
+	 build the game pane
 	 */
 	public TetrisPane() {
 		setPreferredSize(new Dimension(COLUMNS * Cell.CELL_SIZE, ROWS * Cell.CELL_SIZE));
@@ -57,12 +57,12 @@ public class TetrisPane extends JPanel {
 	}
 	
 	/**
-	 * 随机生成一个四格方块
+	 * ramdom build atetromino 
 	 */
 	public void randomOne() {
 		Tetromino tetromino = null;
 		
-		/* 随机生成7种四格方块的其中一种 */
+		/*7 kinds of tetromino */
 		switch(random.nextInt(KIND)) {
 			case I_SHAPED: 
 				tetromino = new IShaped();
@@ -86,7 +86,7 @@ public class TetrisPane extends JPanel {
 				tetromino = new JShaped();
 			    break;
 		}
-		currentTetromino = tetromino;	//当前的四格方块为生成的四格方块
+		currentTetromino = tetromino;	
 		randomNum ++;
 	}
 	
