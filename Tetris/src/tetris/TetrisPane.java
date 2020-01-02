@@ -91,16 +91,16 @@ public class TetrisPane extends JPanel {
 	}
 	
 	/**
-	 * 判断玩家是否输了
-	 * @return true，输了；false，没输
+	 * 
+	 * @return true , player is lose 
 	 */
 	public boolean isGameOver() {
-		int x, y;	//当前俄罗斯方块格子的横坐标和纵坐标
+		int x, y;	// current position
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			x = getCurrentCells()[i].getX();
 			y = getCurrentCells()[i].getY();
 			
-			if(isContain(x, y)) {//看其刚生成的位置是否已存在方块对象，存在的话，表示输了
+			if(isContain(x, y)) {// when current position has another cell , the player is lost
 				return true;
 			}
 		}
@@ -109,23 +109,23 @@ public class TetrisPane extends JPanel {
 	}
 	
 	/**
-	 * 每生成一个俄罗斯方块，通过改变TimerTask的时间间隔来加快下落速度
-	 * @return 时间间隔
+	 * 
+	 * @return the time interval to generate a block
 	 */
 	public double interval() {
 		return INIT_SPEED * Math.pow((double)39 / 38, 0 - randomNum);
 	}
 	
 	/**
-	 * 返回KeyControl类的实例
-	 * @return KeyControl类实例
+	 * 
+	 * @return KeyControl of instance
 	 */
 	public KeyControl getInnerInstanceOfKeyControl() {
 		return keyListener;
 	}
 	
 	/**
-	 * 内部类，用于实现俄罗斯方块的自动下落
+	 *implement auto-drop 
 	 * @author Leslie Leung
 	 */
 	private class DropExecution extends TimerTask {	
@@ -133,8 +133,8 @@ public class TetrisPane extends JPanel {
 		public void run() {
 			// TODO Auto-generated method stub
 			
-			if(isGameOver()) {//如果输了
-				JOptionPane.showMessageDialog(null, "你输了");
+			if(isGameOver()) {//如isgameover 
+				JOptionPane.showMessageDialog(null, "GameOver");
 				autoDrop.cancel();
 				removeKeyListener(keyListener);
 				return;
@@ -142,10 +142,11 @@ public class TetrisPane extends JPanel {
 			
 			if(!isReachBottomEdge()) {
 				currentTetromino.softDrop();
-			} else {
-				landIntoWall();		//把俄罗斯方块添加到墙上
-				removeRows();	//如满行，删除行
-				randomOne();	//马上新建一个俄罗斯方块
+			} 
+			else {
+				landIntoWall();		// add to wall
+				removeRows();	//如if row is full , remove it
+				randomOne();	// generate new one
 				
 				autoDrop.cancel();
 				autoDrop = new Timer();
@@ -156,58 +157,53 @@ public class TetrisPane extends JPanel {
 		}	
 	}
 	
-	/**
-	 * 把俄罗斯方块添加到墙上
-	 */
+	
 	public void landIntoWall() {
-		int x, y;	//定义俄罗斯方块不能移动后的横坐标和纵坐标
+		int x, y;	// fix x,y position
 		
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			x = getCurrentCells()[i].getX();
 			y = getCurrentCells()[i].getY();
 			
-			wall[y][x] = getCurrentCells()[i];	//添加到墙上
+			wall[y][x] = getCurrentCells()[i];	// add current cell to the wall 
 		}
 	}
 	
-	/**
-	 * 内部类，用于实现键盘的事件控制
-	 * @author Leslie Leung
-	 */
+	
 	private class KeyControl extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch(e.getKeyCode()) {
-				case KeyEvent.VK_LEFT: //往左移动
+				case KeyEvent.VK_LEFT: 
 					
-					if(!isReachLeftEdge()) {//当俄罗斯方块没到达左边界时，往左移动
+					if(!isReachLeftEdge()) {
 						currentTetromino.moveLeft();
 						repaint();
 					}					
 					break;
 					
-				case KeyEvent.VK_RIGHT:	//往右移动
+				case KeyEvent.VK_RIGHT:	
 					
-					if(!isReachRightEdge()) {//当俄罗斯方块没到达右边界时，往右移动
+					if(!isReachRightEdge()) {
 						currentTetromino.moveRight();
 						repaint();
 					}
 					break;
 				
-				case KeyEvent.VK_DOWN:	//向下移动
+				case KeyEvent.VK_DOWN:	
 					
-					if(!isReachBottomEdge()) {//当俄罗斯方块没到达下边界时，往下移动
+					if(!isReachBottomEdge()) {
 						currentTetromino.softDrop();
 						repaint();
 					}
 					
 					break;
 					
-				case KeyEvent.VK_SPACE:	//硬下落
+				case KeyEvent.VK_SPACE:	
 					
-					hardDrop();	//硬下落
-					landIntoWall();		//添加到墙中
-					removeRows();	//如满行，删除行
+					hardDrop();	
+					landIntoWall();		
+					removeRows();	
 					
 					randomOne();
 					autoDrop.cancel();
@@ -217,17 +213,17 @@ public class TetrisPane extends JPanel {
 					repaint();
 					break;
 					
-				case KeyEvent.VK_D:	//顺时针转
+				case KeyEvent.VK_D:	
 					
-					if(!clockwiseRotateIsOutOfBounds() && !(currentTetromino instanceof OShaped)) {//俄罗斯方块没越界且其不为O形时，旋转
+					if(!clockwiseRotateIsOutOfBounds() && !(currentTetromino instanceof OShaped)) {
 						currentTetromino.clockwiseRotate(getAxis(), getRotateCells());
 						repaint();
 					}
 					break;
 					
-				case KeyEvent.VK_A:	//逆时针转
+				case KeyEvent.VK_A:	
 					
-					if(!anticlockwiseRotateIsOutOfBounds() && !(currentTetromino instanceof OShaped)) {//俄罗斯方块没越界且其不为O形时，旋转
+					if(!anticlockwiseRotateIsOutOfBounds() && !(currentTetromino instanceof OShaped)) {
 						currentTetromino.anticlockwiseRotate(getAxis(), getRotateCells());
 						repaint();
 					}
@@ -236,14 +232,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，I形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+	
 	private class IShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public IShaped() {
 			cells = new Cell[4];
 			
@@ -252,7 +243,7 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(5, 0, Cell.COLOR_CYAN);
 			cells[3] = new Cell(6, 0, Cell.COLOR_CYAN);
 			
-			/* 设置旋转轴和要旋转的格子 */
+			
 			setAxis();
 			setRotateCells();
 			
@@ -260,14 +251,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，S形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+	
 	private class SShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public SShaped() {
 			cells = new Cell[4];
 			
@@ -276,7 +262,6 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(3, 1, Cell.COLOR_BLUE);
 			cells[3] = new Cell(4, 1, Cell.COLOR_BLUE);
 			
-			/* 设置旋转轴和要旋转的格子 */
 			setAxis();
 			setRotateCells();
 			
@@ -284,14 +269,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，T形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+	
 	private class TShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public TShaped() {
 			cells = new Cell[4];
 			
@@ -300,7 +280,7 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(5, 0, Cell.COLOR_GREEN);
 			cells[3] = new Cell(4, 1, Cell.COLOR_GREEN);
 			
-			/* 设置旋转轴和要旋转的格子 */
+			
 			setAxis();
 			setRotateCells();
 			
@@ -308,14 +288,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，Z形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+
 	private class ZShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+	
 		public ZShaped() {
 			cells = new Cell[4];
 			
@@ -324,7 +299,6 @@ public class TetrisPane extends JPanel {
 			cells[0] = new Cell(4, 1, Cell.COLOR_ORANGE);
 			cells[3] = new Cell(5, 1, Cell.COLOR_ORANGE);
 			
-			/* 设置旋转轴和要旋转的格子 */
 			setAxis();
 			setRotateCells();
 			
@@ -332,14 +306,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，L形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+	
 	private class LShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public LShaped() {
 			cells = new Cell[4];
 			
@@ -348,7 +317,7 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(5, 0, Cell.COLOR_PINK);
 			cells[3] = new Cell(3, 1, Cell.COLOR_PINK);
 			
-			/* 设置旋转轴和要旋转的格子 */
+			
 			setAxis();
 			setRotateCells();
 			
@@ -356,14 +325,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，O形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+
 	private class OShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public OShaped() {
 			cells = new Cell[4];
 			
@@ -372,7 +336,7 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(4, 1, Cell.COLOR_RED);
 			cells[3] = new Cell(5, 1, Cell.COLOR_RED);
 			
-			/* 设置旋转轴和要旋转的格子 */
+			
 			setAxis();
 			setRotateCells();
 			
@@ -380,14 +344,9 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 内部类，J形的四格方块，继承了Tetromino类
-	 * @author Leslie Leung
-	 */
+
 	private class JShaped extends Tetromino {
-		/**
-		 * 构造方法
-		 */
+		
 		public JShaped() {
 			cells = new Cell[4];
 			
@@ -396,138 +355,112 @@ public class TetrisPane extends JPanel {
 			cells[2] = new Cell(5, 0, Cell.COLOR_YELLOW);
 			cells[3] = new Cell(5, 1, Cell.COLOR_YELLOW);
 			
-			/* 设置旋转轴和要旋转的格子 */
+			
 			setAxis();
 			setRotateCells();
 			
 			repaint();
 		}
 	}
-	
-	/**
-	 * 删除若干行
-	 */
+
 	public void removeRows() {
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			removeRow(getCurrentCells()[i].getY());
 		}
 	}
 	
-	/**
-	 * 获取旋转轴
-	 * @return 旋转轴
-	 */
+
 	public Cell getAxis() {
 		return currentTetromino.getAxis();
 	}
 	
-	/**
-	 * 获取需要旋转的格子
-	 * @return 需要旋转的格子
-	 */
+
 	public Cell[] getRotateCells() {
 		return currentTetromino.getRotateCells();
 	}
 	
-	/**
-	 * 获取当前俄罗斯方块的所有格子
-	 * @return 当前俄罗斯方块的所有格子
-	 */
 	public Cell[] getCurrentCells() {
 		return currentTetromino.getCells();
 	}
 	
-	/**
-	 * 判断俄罗斯方块是否到达底部(包括是否到达面板底部和下一位置是否有方块)
-	 * @return true，到达；false，没到达
-	 */
+
 	public boolean isReachBottomEdge() {
-		int oldY, newY, oldX;		//定义格子旧的纵坐标、新的纵坐标和旧的横坐标
+		int oldY, newY, oldX;		
 		
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			oldY = getCurrentCells()[i].getY();
 			newY = oldY + 1;
 			oldX = getCurrentCells()[i].getX();
 			
-			if(oldY == ROWS - 1) {//到达面板底部
+			if(oldY == ROWS - 1) {
 				return true;
 			}
 			
-			if(isContain(oldX, newY)) {//下一位置有方块
+			if(isContain(oldX, newY)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	/**
-	 * 判断俄罗斯方块是否到达左边界(包括是否超出面板左边界和下一位置是否出现与其他方块碰撞)
-	 * @return true，已到达；false，没到达
-	 */
+	
 	public boolean isReachLeftEdge() {
-		int oldX, newX, oldY;		//定义格子旧的横坐标、新的横坐标和旧的纵坐标
+		int oldX, newX, oldY;		
 		
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			oldX = getCurrentCells()[i].getX();
 			newX = oldX - 1;
 			oldY = getCurrentCells()[i].getY();
 			
-			if(oldX == 0 || isContain(newX, oldY)) {//到达左边界
+			if(oldX == 0 || isContain(newX, oldY)) {
 				return true;
 			}
 			
-			if(isContain(newX, oldY)) {//下一位置有方块
+			if(isContain(newX, oldY)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	/**
-	 * 判断俄罗斯方块是否到达右边界(包括是否超出面板右边界和下一位置是否出现与其他方块碰撞)
-	 * @return true，已到达；false，没到达
-	 */
+
 	public boolean isReachRightEdge() {
-		int oldX, newX, oldY;		//定义格子旧的横坐标、新的横坐标和旧的纵坐标
+		int oldX, newX, oldY;		
 		
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			oldX = getCurrentCells()[i].getX();
 			newX = oldX + 1;
 			oldY = getCurrentCells()[i].getY();
 			
-			if(oldX == COLUMNS - 1 || isContain(newX, oldY)) {//到达右边界
+			if(oldX == COLUMNS - 1 || isContain(newX, oldY)) {
 				return true;
 			}
 			
-			if(isContain(newX, oldY)) {//下一位置有方块
+			if(isContain(newX, oldY)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	/**
-	 * 判断俄罗斯方块顺时针转后是否超出边界(包括是否超出面板边界和下一位置是否有方块)
-	 * @return true，超出边界；false，没超边界
-	 */
 	public boolean clockwiseRotateIsOutOfBounds() {
-		int oldX;	//rotateCell的横坐标
-		int oldY;	//rotateCell的纵坐标
-		int newX;	//rotateCell旋转后的横坐标
-		int newY;	//rotateCell旋转后的纵坐标
+		int oldX;	
+		int oldY;	
+		int newX;	
+		int newY;	
 		
 		for(int i = 0; i < 3; i ++) {
 			oldX = getRotateCells()[i].getX();
 			oldY = getRotateCells()[i].getY();
 			
-			newX = getAxis().getX() - oldY + getAxis().getY();	//新横坐标计算算法
-			newY = getAxis().getY() + oldX - getAxis().getX();	//新纵坐标计算算法
+			newX = getAxis().getX() - oldY + getAxis().getY();	
+			newY = getAxis().getY() + oldX - getAxis().getX();	
 			
-			if(newX < 0 || newY < 0 || newX > COLUMNS - 1 || newY > ROWS - 1) {//如果越界，返回true
+			if(newX < 0 || newY < 0 || newX > COLUMNS - 1 || newY > ROWS - 1) {
 				return true;
 			}
 			
-			if(isContain(newX, newY)) {//如果越界，返回true
+			if(isContain(newX, newY)) {
 				return true;
 			}
 		}
@@ -535,28 +468,25 @@ public class TetrisPane extends JPanel {
 		return false;
 	}
 	
-	/**
-	 * 判断俄罗斯方块逆时针转后是否超出边界(包括是否超出面板边界和下一位置是否有方块)
-	 * @return true，超出边界；false，没超边界
-	 */
+
 	public boolean anticlockwiseRotateIsOutOfBounds() {
-		int oldX;	//rotateCell的横坐标
-		int oldY;	//rotateCell的纵坐标
-		int newX;	//rotateCell旋转后的横坐标
-		int newY;	//rotateCell旋转后的纵坐标
+		int oldX;	
+		int oldY;	
+		int newX;	
+		int newY;	
 		
 		for(int i = 0; i < 3; i ++) {
 			oldX = getRotateCells()[i].getX();
 			oldY = getRotateCells()[i].getY();
 			
-			newX = getAxis().getX() - getAxis().getY() + oldY;	//新横坐标计算算法
-			newY = getAxis().getY() + getAxis().getX() - oldX;	//新纵坐标计算算法
+			newX = getAxis().getX() - getAxis().getY() + oldY;	
+			newY = getAxis().getY() + getAxis().getX() - oldX;	
 			
-			if(newX < 0 || newY < 0 || newX > COLUMNS - 1 || newY > ROWS - 1) {//如果越界，返回true
+			if(newX < 0 || newY < 0 || newX > COLUMNS - 1 || newY > ROWS - 1) {
 				return true;
 			}
 			
-			if(isContain(newX, newY)) {//如果越界，返回true
+			if(isContain(newX, newY)) {
 				return true;
 			}
 		}
@@ -564,12 +494,6 @@ public class TetrisPane extends JPanel {
 		return false;
 	}
 	
-	/**
-	 * 判断某个格子是否存在方块对象
-	 * @param x 横坐标
-	 * @param y 纵坐标
-	 * @return true，存在对象；false，不存在对象
-	 */
 	public boolean isContain(int x, int y) {
 		if(wall[y][x] == null) {
 			return false;
@@ -578,34 +502,29 @@ public class TetrisPane extends JPanel {
 		}
 	}
 	
-	/**
-	 * 实现俄罗斯方块的硬下落
-	 */
+
 	public void hardDrop() {
 		while(!isReachBottomEdge()) {
 			currentTetromino.softDrop();
 		}
 	}
 	
-	/**
-	 * 消除单行
-	 * @param i 行的下标
-	 */
+
 	public void removeRow(int i) {
 		int oldY, newY;	
 		
 		for(int j = 0; j < COLUMNS; j ++) {
-			if(wall[i][j] == null) {//如果其中一个方块没有填满，return
+			if(wall[i][j] == null) {
 				return;
 			}
 		}
 		
-		/* 消除行并把该行上面的方块往下移 */
+		
 		for(int k = i; k >= 1; k --){
 			System.arraycopy(wall[k - 1], 0, wall[k], 0, COLUMNS);
 			
 			for(int m = 0; m < COLUMNS; m ++) {
-				if(wall[k][m] != null) {//对于不是空的对象，要重设其纵坐标
+				if(wall[k][m] != null) {
 					oldY = wall[k][m].getY();
 					newY = oldY + 1;
 					wall[k][m].setY(newY);				
@@ -621,19 +540,18 @@ public class TetrisPane extends JPanel {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getBounds().width, getBounds().height);
 		
-		/* 画墙 */
 		for(int i = 0; i < ROWS; i ++) {
 			for(int j = 0; j < COLUMNS; j ++) {
-				if(wall[i][j] == null) {//某点的方块为空时
+				if(wall[i][j] == null) {
 					g.setColor(Color.WHITE);
 					g.fillRect(j * Cell.CELL_SIZE + 1, i * Cell.CELL_SIZE + 1, Cell.CELL_SIZE - 2, Cell.CELL_SIZE - 2);
-				} else {//当方块不为空时
+				} else {
 					wall[i][j].paintCell(g);
 				}
 			}
 		}
 		
-		/* 画当前俄罗斯方块 */
+		
 		for(int i = 0; i < getCurrentCells().length; i ++) {
 			getCurrentCells()[i].paintCell(g);
 		}
